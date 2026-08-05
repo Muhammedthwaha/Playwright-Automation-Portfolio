@@ -3,54 +3,43 @@ name: Playwright Tests
 # 1. When should the robot wake up?
 on:
   push:
-    branches: [ main ] 
-    # The Magic Monorepo Rule: Only wake up if this specific folder changes!
-    paths:
-      - 'playwright-pom-auth-project/**'
-      
+    branches: [main]
+
   pull_request:
-    branches: [ main ]
-    # (We put it here too just in case you ever make a pull request!)
-    paths:
-      - 'playwright-pom-auth-project/**'
+    branches: [main]
 
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest # 2. What operating system should the robot use? (Linux)
-    
-    # 3. Tell the robot to go inside your specific project folder!
-    defaults:
-      run:
-        working-directory: playwright-pom-auth-project
 
     steps:
-    # 4. Download your code from GitHub onto the robot's hard drive
-    - uses: actions/checkout@v4
-    
-    # 5. Install Node.js on the robot
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-        
-    # 6. Install your package.json dependencies
-    - name: Install dependencies
-      run: npm install
-      
-    # 7. Install Playwright and the browser engines on the robot
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-      
-    # 8. Actually run your test suite!
-    - name: Run Playwright tests
-      run: npx playwright test
-      
-    # 9. Save the HTML Report so we can view it later
-    - name: Upload HTML report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-pom-auth-project/playwright-report/
-        retention-days: 30
+      # 4. Download your code from GitHub onto the robot's hard drive
+      - uses: actions/checkout@v4
+
+      # 5. Install Node.js on the robot
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # 6. Install your package.json dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 7. Install Playwright and the browser engines on the robot
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 8. Actually run your test suite!
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      # 9. Save the HTML Report so we can view it later
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
