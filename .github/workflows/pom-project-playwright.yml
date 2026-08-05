@@ -11,8 +11,8 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest # 2. What operating system should the robot use? (Linux)
-
+    # 2. What operating system should the robot use? (Linux)
+    runs-on: ubuntu-latest 
     steps:
       # 4. Download your code from GitHub onto the robot's hard drive
       - uses: actions/checkout@v4
@@ -22,12 +22,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'npm'
 
       # 6. Install your package.json dependencies
       - name: Install dependencies
         run: npm install
 
-      # 7. Install Playwright and the browser engines on the robot
+      # 7. Cache Playwright Browsers to save download time
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      # 8. Install Playwright and the browser engines on the robot (will skip downloading if cached!)
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
