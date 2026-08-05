@@ -7,7 +7,7 @@ module.exports = defineConfig({
     // 2. Maximum time one test is allowed to run 30 seconds 
     timeout: 30000,
     // 3. Reporter format for terminal logs
-    reporter: 'list',
+    reporter: [['list'], ['html']],
 
     // 4. Tell Playwright to break apart tests inside the SAME file and run them in parallel!
     fullyParallel: true,
